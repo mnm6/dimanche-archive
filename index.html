@@ -152,6 +152,58 @@ body.modal-open { overflow: hidden; }
   .detail img { max-height: 68dvh; }
 }
 </style>
+
+<style id="v6-mobile-close-fix">
+  /* V6: keep the close control permanently reachable on mobile Safari. */
+  .modal .close,
+  .modal-close,
+  .close,
+  #close,
+  #closeButton,
+  [data-close] {
+    position: fixed !important;
+    top: calc(env(safe-area-inset-top, 0px) + 12px) !important;
+    right: 12px !important;
+    left: auto !important;
+    z-index: 2147483647 !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    background: rgba(255,255,255,.96) !important;
+    border: 1.5px solid #111 !important;
+    color: #111 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    margin: 0 !important;
+  }
+
+  @media (max-width: 700px) {
+    .modal .close,
+    .modal-close,
+    .close,
+    #close,
+    #closeButton,
+    [data-close] {
+      top: calc(env(safe-area-inset-top, 0px) + 10px) !important;
+      right: 10px !important;
+    }
+
+    /* Reserve a little air at the top of the detail view so the fixed ×
+       never competes with the image/caption. */
+    .modal-content,
+    .detail,
+    .detail-content {
+      padding-top: max(58px, calc(env(safe-area-inset-top, 0px) + 58px)) !important;
+    }
+  }
+</style>
+
 </head>
 <body>
 <main id="archive" class="archive" aria-label="Dimanche Score archive">
