@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dimanche — Score (archive)</title>
+<style>
+:root {
+  --page-gap: 12px;
+  --side-space: 4vw;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+  overscroll-behavior-x: contain;
+}
+body.modal-open { overflow: hidden; }
+
+.archive {
+  width: 100%;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: var(--page-gap);
+  padding: 0 var(--side-space);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.archive::-webkit-scrollbar { display: none; }
+
+.sheet {
+  position: relative;
+  flex: 0 0 auto;
+  width: 92vw;
+  aspect-ratio: 420 / 297;
+  background: #fff;
+}
+.sheet img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.hotspot {
+  position: absolute;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  cursor: zoom-in;
+  touch-action: manipulation;
+}
+.hotspot:focus-visible {
+  outline: 1px solid #111;
+  outline-offset: 2px;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  background: rgba(255,255,255,.90);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.modal.is-open { display: block; }
+
+.close {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  z-index: 102;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: #111;
+  font: 300 30px/1 Arial, Helvetica, sans-serif;
+  cursor: pointer;
+}
+
+.modal-inner {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding:
+    max(64px, calc(env(safe-area-inset-top) + 52px))
+    max(22px, env(safe-area-inset-right))
+    max(38px, env(safe-area-inset-bottom))
+    max(22px, env(safe-area-inset-left));
+}
+
+.detail {
+  width: min(90vw, 1100px);
+}
+.detail img {
+  display: block;
+  max-width: 100%;
+  max-height: 70dvh;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
+}
+.detail-text {
+  width: 100%;
+  max-width: 720px;
+  margin: 14px auto 0;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.detail-label {
+  margin: 0 0 28px;
+  font-weight: 700;
+}
+.detail-caption { margin: 0; }
+.detail-caption span { display: block; }
+
+@media (min-width: 800px) {
+  :root { --page-gap: 18px; --side-space: 3vw; }
+  .sheet { width: 70vw; max-width: 1180px; }
+  .detail-text { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<main id="archive" class="archive" aria-label="Dimanche Score archive">
+
+<section class="sheet" aria-label="Score archive sheet 1">
+  <img src="sheet1.png" alt="Score archive sheet 1" draggable="false">
+  <button class="hotspot" aria-label="Open warmed" data-item="warmed"
+style="left:2.2%;top:3.1%;width:29.7%;height:22.1%"></button><button class="hotspot" aria-label="Open water bottle" data-item="water-bottle"
+style="left:39.0%;top:29.6%;width:21.0%;height:51.8%"></button><button class="hotspot" aria-label="Open Tote bag" data-item="tote-bag"
+style="left:67.1%;top:3.1%;width:24.8%;height:52.0%"></button>
+</section>
+<section class="sheet" aria-label="Score archive sheet 2">
+  <img src="sheet2.png" alt="Score archive sheet 2" draggable="false">
+  <button class="hotspot" aria-label="Open inside" data-item="inside"
+style="left:2.2%;top:47.8%;width:18.0%;height:34.4%"></button><button class="hotspot" aria-label="Open stumble" data-item="stumble"
+style="left:26.3%;top:9.1%;width:29.3%;height:63.2%"></button><button class="hotspot" aria-label="Open still cool" data-item="still-cool"
+style="left:61.6%;top:3.1%;width:30.5%;height:30.6%"></button>
+</section>
+<section class="sheet" aria-label="Score archive sheet 3">
+  <img src="sheet3.png" alt="Score archive sheet 3" draggable="false">
+  <button class="hotspot" aria-label="Open peach" data-item="peach"
+style="left:2.2%;top:28.2%;width:24.8%;height:53.3%"></button><button class="hotspot" aria-label="Open Antarctic silhouette" data-item="antarctic-silhouette"
+style="left:33.6%;top:3.2%;width:27.0%;height:45.8%"></button><button class="hotspot" aria-label="Open form" data-item="form"
+style="left:67.3%;top:43.2%;width:24.8%;height:28.3%"></button>
+</section>
+</main>
+
+<div id="modal" class="modal" role="dialog" aria-modal="true" aria-label="Image detail">
+  <button id="close" class="close" aria-label="Close">×</button>
+  <div class="modal-inner" id="modalInner">
+    <div class="detail">
+      <img id="detailImage" alt="">
+      <div class="detail-text">
+        <p class="detail-label" id="detailLabel"></p>
+        <p class="detail-caption" id="detailCaption"></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ITEMS = {"warmed": {"label": "warmed", "image": "warmed.jpeg", "caption": ["Degree glass", "Estonian Health Museum"]}, "water-bottle": {"label": "water bottle", "image": "water-bottle.png", "caption": ["Mineral water bottle", "The Swedish Cultural Park Småland"]}, "tote-bag": {"label": "Tote bag", "image": "tote-bag.jpg", "caption": ["Carrying A Bag", "Goshen College Photograph Collection"]}, "inside": {"label": "inside", "image": "inside.jpg", "caption": ["Fuel Bulkhead Baffle", "Atlas Negative Collection Images"]}, "stumble": {"label": "stumble", "image": "stumble.jpg", "caption": ["Gymnastic exercise", "Heinrich Hamann", "MKG Hamburg"]}, "still-cool": {"label": "still cool", "image": "still-cool.jpg", "caption": ["Frost patterns on the window", "Lužec nad Vltavou, Czech Republic"]}, "peach": {"label": "peach", "image": "peach.jpg", "caption": ["Peach water tower, Frontage Road, Gaffney, South Carolina.", "John Margolies Roadside America photograph archive"]}, "antarctic-silhouette": {"label": "Antarctic silhouette", "image": "antarctic-silhouette.jpg", "caption": ["8c Antarctic Treaty plate proof", "Smithsonian’s National Postal Museum"]}, "form": {"label": "form", "image": "form.png", "caption": ["Form", "Bohuslän Museum, Sweden"]}};
+const archive = document.getElementById('archive');
+const modal = document.getElementById('modal');
+const closeButton = document.getElementById('close');
+const detailImage = document.getElementById('detailImage');
+const detailLabel = document.getElementById('detailLabel');
+const detailCaption = document.getElementById('detailCaption');
+
+let savedScrollLeft = 0;
+let lastTrigger = null;
+
+function openItem(key, trigger) {
+  const item = ITEMS[key];
+  if (!item) return;
+  savedScrollLeft = archive.scrollLeft;
+  lastTrigger = trigger;
+
+  detailImage.src = item.image;
+  detailImage.alt = item.label;
+  detailLabel.textContent = item.label;
+  detailCaption.replaceChildren(...item.caption.map(line => {
+    const span = document.createElement('span');
+    span.textContent = line;
+    return span;
+  }));
+
+  modal.classList.add('is-open');
+  document.body.classList.add('modal-open');
+  closeButton.focus({preventScroll: true});
+}
+
+function closeModal() {
+  modal.classList.remove('is-open');
+  document.body.classList.remove('modal-open');
+  requestAnimationFrame(() => {
+    archive.scrollLeft = savedScrollLeft;
+    if (lastTrigger) lastTrigger.focus({preventScroll: true});
+  });
+}
+
+document.querySelectorAll('.hotspot').forEach(button => {
+  button.addEventListener('click', () => openItem(button.dataset.item, button));
+});
+closeButton.addEventListener('click', closeModal);
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+});
+
+modal.addEventListener('click', event => {
+  if (event.target === modal || event.target.id === 'modalInner') closeModal();
+});
+</script>
+</body>
+</html>
