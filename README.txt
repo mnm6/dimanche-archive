@@ -1,12 +1,12 @@
-DIMANCHE — SCORE (ARCHIVE) / MOBILE WEB PROTOTYPE v4
+DIMANCHE — SCORE (ARCHIVE) / MOBILE WEB PROTOTYPE v5
 
-This version uses the user's ORIGINAL image files for all nine enlarged views.
+Changes in v5:
+- Mobile detail view starts farther out so the full image + title + credits are visible more comfortably.
+- The close × remains fixed at the upper-right of the screen at all times.
+- Tap the individual image once to zoom to 2×.
+- While zoomed, drag/pan the image with a finger or mouse.
+- Tap the image again (without dragging) to return to the fitted view.
+- Original image files are still used directly; no PDF crops.
+- The pale Score background, horizontal scrolling, and return-to-same-position behavior remain unchanged.
 
-Changes in v4:
-- No enlarged image is cropped from the PDF/sheet raster.
-- Each detail view loads the original source photograph directly.
-- Original aspect ratios are preserved.
-- object-fit: contain is kept, so the full image remains visible.
-- The pale full-score background, horizontal scrolling, captions, and × return behavior remain unchanged.
-
-Open index.html in a browser.
+To update GitHub Pages, replace the repository files with the contents of this folder (or upload/overwrite index.html and keep the image files).

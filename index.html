@@ -105,14 +105,32 @@ body.modal-open { overflow: hidden; }
 .detail {
   width: min(90vw, 1100px);
 }
+.image-stage {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  touch-action: none;
+  cursor: zoom-in;
+}
 .detail img {
   display: block;
   max-width: 100%;
-  max-height: 70dvh;
+  max-height: 52dvh;
   width: auto;
   height: auto;
   margin: 0 auto;
+  object-fit: contain;
+  transform-origin: center center;
+  will-change: transform;
+  user-select: none;
+  -webkit-user-select: none;
 }
+.image-stage.is-zoomed { cursor: grab; }
+.image-stage.is-dragging { cursor: grabbing; }
+.image-stage.is-zoomed img { transform: translate(var(--pan-x, 0px), var(--pan-y, 0px)) scale(2); }
 .detail-text {
   width: 100%;
   max-width: 720px;
@@ -131,6 +149,7 @@ body.modal-open { overflow: hidden; }
   :root { --page-gap: 18px; --side-space: 3vw; }
   .sheet { width: 70vw; max-width: 1180px; }
   .detail-text { font-size: 14px; }
+  .detail img { max-height: 68dvh; }
 }
 </style>
 </head>
@@ -164,7 +183,9 @@ style="left:67.3%;top:43.2%;width:24.8%;height:28.3%"></button>
   <button id="close" class="close" aria-label="Close">×</button>
   <div class="modal-inner" id="modalInner">
     <div class="detail">
-      <img id="detailImage" alt="">
+      <div id="imageStage" class="image-stage" aria-label="Tap image to zoom">
+        <img id="detailImage" alt="" draggable="false">
+      </div>
       <div class="detail-text">
         <p class="detail-label" id="detailLabel"></p>
         <p class="detail-caption" id="detailCaption"></p>
@@ -179,6 +200,7 @@ const archive = document.getElementById('archive');
 const modal = document.getElementById('modal');
 const closeButton = document.getElementById('close');
 const detailImage = document.getElementById('detailImage');
+const imageStage = document.getElementById('imageStage');
 const detailLabel = document.getElementById('detailLabel');
 const detailCaption = document.getElementById('detailCaption');
 
@@ -200,12 +222,89 @@ function openItem(key, trigger) {
     return span;
   }));
 
+  resetZoom();
   modal.classList.add('is-open');
   document.body.classList.add('modal-open');
   closeButton.focus({preventScroll: true});
 }
 
+
+let zoomed = false;
+let panX = 0;
+let panY = 0;
+let dragStartX = 0;
+let dragStartY = 0;
+let startPanX = 0;
+let startPanY = 0;
+let dragging = false;
+let moved = false;
+
+function applyPan() {
+  imageStage.style.setProperty('--pan-x', `${panX}px`);
+  imageStage.style.setProperty('--pan-y', `${panY}px`);
+}
+
+function resetZoom() {
+  zoomed = false;
+  panX = 0;
+  panY = 0;
+  dragging = false;
+  moved = false;
+  imageStage.classList.remove('is-zoomed', 'is-dragging');
+  applyPan();
+}
+
+function toggleZoom() {
+  if (zoomed) {
+    resetZoom();
+  } else {
+    zoomed = true;
+    panX = 0;
+    panY = 0;
+    imageStage.classList.add('is-zoomed');
+    applyPan();
+  }
+}
+
+imageStage.addEventListener('pointerdown', event => {
+  if (!zoomed) return;
+  dragging = true;
+  moved = false;
+  dragStartX = event.clientX;
+  dragStartY = event.clientY;
+  startPanX = panX;
+  startPanY = panY;
+  imageStage.classList.add('is-dragging');
+  imageStage.setPointerCapture(event.pointerId);
+});
+
+imageStage.addEventListener('pointermove', event => {
+  if (!dragging || !zoomed) return;
+  const dx = event.clientX - dragStartX;
+  const dy = event.clientY - dragStartY;
+  if (Math.abs(dx) + Math.abs(dy) > 6) moved = true;
+  panX = startPanX + dx;
+  panY = startPanY + dy;
+  applyPan();
+});
+
+function finishDrag(event) {
+  if (!dragging) return;
+  dragging = false;
+  imageStage.classList.remove('is-dragging');
+  try { imageStage.releasePointerCapture(event.pointerId); } catch (_) {}
+}
+imageStage.addEventListener('pointerup', finishDrag);
+imageStage.addEventListener('pointercancel', finishDrag);
+
+imageStage.addEventListener('click', event => {
+  event.stopPropagation();
+  if (moved) { moved = false; return; }
+  toggleZoom();
+});
+
 function closeModal() {
+  resetZoom();
   modal.classList.remove('is-open');
   document.body.classList.remove('modal-open');
   requestAnimationFrame(() => {
